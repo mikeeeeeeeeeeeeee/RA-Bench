@@ -1,0 +1,335 @@
+{
+ "sampling": "Random sample, seed 20261027; 5 per model; globally unique prompts and file SHA256; no quality filtering",
+ "sampledAt": "2026-10-27",
+ "clips": [
+  {
+   "id": "ai-minimax-h3-0249",
+   "kind": "ai",
+   "model": "minimax-h3",
+   "modelName": "MiniMax-H3",
+   "maker": "MiniMax",
+   "title": "A lion chases a skateboard",
+   "prompt": "A lion, a skateboard, a pillow, and a mug are playing a game of tag. The lion is chasing the skateboard, but the pillow keeps bouncing in front of it, causing the lion to trip over it. The mug is constantly thrown into the air by the pillow’s jumps, landing on the skateboard and blocking the lion’s path.",
+   "dims": [
+    "Composition"
+   ],
+   "promptId": "vbench2-0249",
+   "src": "media/rai/ai-minimax-h3-0249.mp4",
+   "poster": "media/rai/ai-minimax-h3-0249.webp"
+  },
+  {
+   "id": "ai-minimax-h3-0631",
+   "kind": "ai",
+   "model": "minimax-h3",
+   "modelName": "MiniMax-H3",
+   "maker": "MiniMax",
+   "title": "A car on a mountain road",
+   "prompt": "A car speeds along a winding mountain road, with trees rapidly passing by.",
+   "dims": [
+    "Instance Preservation"
+   ],
+   "promptId": "vbench2-0631",
+   "src": "media/rai/ai-minimax-h3-0631.mp4",
+   "poster": "media/rai/ai-minimax-h3-0631.webp"
+  },
+  {
+   "id": "ai-minimax-h3-0486",
+   "kind": "ai",
+   "model": "minimax-h3",
+   "modelName": "MiniMax-H3",
+   "maker": "MiniMax",
+   "title": "Email, then a phone call",
+   "prompt": "A person is checking their email, then they suddenly start making a phone call.",
+   "dims": [
+    "Human Anatomy",
+    "Human Identity",
+    "Human Clothes",
+    "Motion Order Understanding"
+   ],
+   "promptId": "vbench2-0486",
+   "src": "media/rai/ai-minimax-h3-0486.mp4",
+   "poster": "media/rai/ai-minimax-h3-0486.webp"
+  },
+  {
+   "id": "ai-minimax-h3-0603",
+   "kind": "ai",
+   "model": "minimax-h3",
+   "modelName": "MiniMax-H3",
+   "maker": "MiniMax",
+   "title": "Two orange dogs running",
+   "prompt": "Two orange dogs are running.",
+   "dims": [
+    "Instance Preservation"
+   ],
+   "promptId": "vbench2-0603",
+   "src": "media/rai/ai-minimax-h3-0603.mp4",
+   "poster": "media/rai/ai-minimax-h3-0603.webp"
+  },
+  {
+   "id": "ai-minimax-h3-0833",
+   "kind": "ai",
+   "model": "minimax-h3",
+   "modelName": "MiniMax-H3",
+   "maker": "MiniMax",
+   "title": "Drinking a smoothie",
+   "prompt": "A person is drinking a smoothie from a glass.",
+   "dims": [
+    "Motion Rationality"
+   ],
+   "promptId": "vbench2-0833",
+   "src": "media/rai/ai-minimax-h3-0833.mp4",
+   "poster": "media/rai/ai-minimax-h3-0833.webp"
+  },
+  {
+   "id": "ai-seedance-2.5-0428",
+   "kind": "ai",
+   "model": "seedance-2.5",
+   "modelName": "Seedance 2.5",
+   "maker": "ByteDance",
+   "title": "A man dancing",
+   "prompt": "A man is dancing.",
+   "dims": [
+    "Human Anatomy",
+    "Human Identity",
+    "Human Clothes"
+   ],
+   "promptId": "vbench2-0428",
+   "src": "media/rai/ai-seedance-2.5-0428.mp4",
+   "poster": "media/rai/ai-seedance-2.5-0428.webp"
+  },
+  {
+   "id": "ai-seedance-2.5-0300",
+   "kind": "ai",
+   "model": "seedance-2.5",
+   "modelName": "Seedance 2.5",
+   "maker": "ByteDance",
+   "title": "A candle steadies",
+   "prompt": "A candle changes from flickering dimly to steady bright.",
+   "dims": [
+    "Dynamic Attribute"
+   ],
+   "promptId": "vbench2-0300",
+   "src": "media/rai/ai-seedance-2.5-0300.mp4",
+   "poster": "media/rai/ai-seedance-2.5-0300.webp"
+  },
+  {
+   "id": "ai-seedance-2.5-0740",
+   "kind": "ai",
+   "model": "seedance-2.5",
+   "modelName": "Seedance 2.5",
+   "maker": "ByteDance",
+   "title": "A rubber duck bounces",
+   "prompt": "A soft rubber duck is tossed onto the floor, showing its energetic bounce as it strikes the surface.",
+   "dims": [
+    "Mechanics"
+   ],
+   "promptId": "vbench2-0740",
+   "src": "media/rai/ai-seedance-2.5-0740.mp4",
+   "poster": "media/rai/ai-seedance-2.5-0740.webp"
+  },
+  {
+   "id": "ai-seedance-2.5-0847",
+   "kind": "ai",
+   "model": "seedance-2.5",
+   "modelName": "Seedance 2.5",
+   "maker": "ByteDance",
+   "title": "Turning on a desk lamp",
+   "prompt": "A person is turning on the desk lamp.",
+   "dims": [
+    "Motion Rationality"
+   ],
+   "promptId": "vbench2-0847",
+   "src": "media/rai/ai-seedance-2.5-0847.mp4",
+   "poster": "media/rai/ai-seedance-2.5-0847.webp"
+  },
+  {
+   "id": "ai-seedance-2.5-0782",
+   "kind": "ai",
+   "model": "seedance-2.5",
+   "modelName": "Seedance 2.5",
+   "maker": "ByteDance",
+   "title": "A horse starts on the hay",
+   "prompt": "A horse is standing in the stable, then it suddenly starts chewing hay.",
+   "dims": [
+    "Motion Order Understanding"
+   ],
+   "promptId": "vbench2-0782",
+   "src": "media/rai/ai-seedance-2.5-0782.mp4",
+   "poster": "media/rai/ai-seedance-2.5-0782.webp"
+  },
+  {
+   "id": "ai-wan-3.0-0286",
+   "kind": "ai",
+   "model": "wan-3.0",
+   "modelName": "Wan 3.0",
+   "maker": "Alibaba",
+   "title": "A cloud turns from white to black",
+   "prompt": "A cloud changes from white to black.",
+   "dims": [
+    "Dynamic Attribute"
+   ],
+   "promptId": "vbench2-0286",
+   "src": "media/rai/ai-wan-3.0-0286.mp4",
+   "poster": "media/rai/ai-wan-3.0-0286.webp"
+  },
+  {
+   "id": "ai-wan-3.0-0243",
+   "kind": "ai",
+   "model": "wan-3.0",
+   "modelName": "Wan 3.0",
+   "maker": "Alibaba",
+   "title": "A lion’s circus trick",
+   "prompt": "A lion, a lamp, a skateboard, and a bowl of soup are trying to perform a circus trick. The lion is balancing on the skateboard while sipping the soup from the bowl, but the lamp starts spinning wildly, casting light in all directions and blinding the lion, causing it to fall off the skateboard and spill the soup everywhere.",
+   "dims": [
+    "Composition"
+   ],
+   "promptId": "vbench2-0243",
+   "src": "media/rai/ai-wan-3.0-0243.mp4",
+   "poster": "media/rai/ai-wan-3.0-0243.webp"
+  },
+  {
+   "id": "ai-wan-3.0-0793",
+   "kind": "ai",
+   "model": "wan-3.0",
+   "modelName": "Wan 3.0",
+   "maker": "Alibaba",
+   "title": "A horse walks to the barn",
+   "prompt": "A horse is standing by the fence, then it suddenly starts walking to the barn.",
+   "dims": [
+    "Motion Order Understanding"
+   ],
+   "promptId": "vbench2-0793",
+   "src": "media/rai/ai-wan-3.0-0793.mp4",
+   "poster": "media/rai/ai-wan-3.0-0793.webp"
+  },
+  {
+   "id": "ai-wan-3.0-0271",
+   "kind": "ai",
+   "model": "wan-3.0",
+   "modelName": "Wan 3.0",
+   "maker": "Alibaba",
+   "title": "Wings change colour",
+   "prompt": "A butterfly's wings change from yellow to white.",
+   "dims": [
+    "Dynamic Attribute"
+   ],
+   "promptId": "vbench2-0271",
+   "src": "media/rai/ai-wan-3.0-0271.mp4",
+   "poster": "media/rai/ai-wan-3.0-0271.webp"
+  },
+  {
+   "id": "ai-wan-3.0-0943",
+   "kind": "ai",
+   "model": "wan-3.0",
+   "modelName": "Wan 3.0",
+   "maker": "Alibaba",
+   "title": "Orbiting a microwave",
+   "prompt": "The camera orbits around. Microwaves, the camera circles around.",
+   "dims": [
+    "Multi-View Consistency"
+   ],
+   "promptId": "vbench2-0943",
+   "src": "media/rai/ai-wan-3.0-0943.mp4",
+   "poster": "media/rai/ai-wan-3.0-0943.webp"
+  },
+  {
+   "id": "real-01b_0010-002",
+   "kind": "real",
+   "title": "A forest road after a wildfire, in the rain",
+   "credit": "DVIDS",
+   "license": "Public domain",
+   "url": "https://www.dvidshub.net/video/977626/wildfire-and-rain",
+   "anchor": "L1-01_L2-01b_0010__scene_002",
+   "src": "media/rai/real-01b_0010-002.mp4",
+   "poster": "media/rai/real-01b_0010-002.webp"
+  },
+  {
+   "id": "real-01b_0010-004",
+   "kind": "real",
+   "title": "A charred trunk after a wildfire",
+   "credit": "DVIDS",
+   "license": "Public domain",
+   "url": "https://www.dvidshub.net/video/977626/wildfire-and-rain",
+   "anchor": "L1-01_L2-01b_0010__scene_004",
+   "src": "media/rai/real-01b_0010-004.mp4",
+   "poster": "media/rai/real-01b_0010-004.webp"
+  },
+  {
+   "id": "real-02d_0003-003",
+   "kind": "real",
+   "title": "Marines in deep snow, arctic exercise",
+   "credit": "DVIDS",
+   "license": "Public domain",
+   "url": "https://www.dvidshub.net/video/998318/core26-us-marines-conduct-cold-weather-training-during-arctic-exercise-b-roll",
+   "anchor": "L1-02_L2-02d_0003__scene_003",
+   "src": "media/rai/real-02d_0003-003.mp4",
+   "poster": "media/rai/real-02d_0003-003.webp"
+  },
+  {
+   "id": "real-04d_0011-003",
+   "kind": "real",
+   "title": "Kylo, a search dog, Pacific Palisades",
+   "credit": "DVIDS",
+   "license": "Public domain",
+   "url": "https://www.dvidshub.net/video/952285/usar-k9-dogs-conduct-search-missions-pacific-palisades",
+   "anchor": "L1-04_L2-04d_0011__scene_003",
+   "src": "media/rai/real-04d_0011-003.mp4",
+   "poster": "media/rai/real-04d_0011-003.webp"
+  },
+  {
+   "id": "real-04d_0011-010",
+   "kind": "real",
+   "title": "A search dog in fire rubble, Pacific Palisades",
+   "credit": "DVIDS",
+   "license": "Public domain",
+   "url": "https://www.dvidshub.net/video/952285/usar-k9-dogs-conduct-search-missions-pacific-palisades",
+   "anchor": "L1-04_L2-04d_0011__scene_010",
+   "src": "media/rai/real-04d_0011-010.mp4",
+   "poster": "media/rai/real-04d_0011-010.webp"
+  },
+  {
+   "id": "real-09d_0005-005",
+   "kind": "real",
+   "title": "A sea star on a deep-sea boulder, off Alaska",
+   "credit": "NOAA Ocean Exploration",
+   "license": "Public domain",
+   "url": "https://oceanexplorer.noaa.gov/expedition-feature/okeanos-seascape-alaska-ex2304-features-summary/",
+   "anchor": "L1-09_L2-09d_0005__scene_005",
+   "src": "media/rai/real-09d_0005-005.mp4",
+   "poster": "media/rai/real-09d_0005-005.webp"
+  },
+  {
+   "id": "real-09d_0005-008",
+   "kind": "real",
+   "title": "A deep-sea fish meets the camera, off Alaska",
+   "credit": "NOAA Ocean Exploration",
+   "license": "Public domain",
+   "url": "https://oceanexplorer.noaa.gov/expedition-feature/okeanos-seascape-alaska-ex2304-features-summary/",
+   "anchor": "L1-09_L2-09d_0005__scene_008",
+   "src": "media/rai/real-09d_0005-008.mp4",
+   "poster": "media/rai/real-09d_0005-008.webp"
+  },
+  {
+   "id": "real-10c_0003-001",
+   "kind": "real",
+   "title": "A concert crowd, hands raised",
+   "credit": "Pexels",
+   "license": "Pexels License",
+   "url": "https://www.pexels.com/video/dynamic-concert-audience-with-raised-hands-34594434/",
+   "anchor": "L1-10_L2-10c_0003__scene_001",
+   "src": "media/rai/real-10c_0003-001.mp4",
+   "poster": "media/rai/real-10c_0003-001.webp"
+  },
+  {
+   "id": "real-10e_0005-001",
+   "kind": "real",
+   "title": "Huejotzingo Carnival, Mexico",
+   "credit": "Pexels",
+   "license": "Pexels License",
+   "url": "https://www.pexels.com/video/colorful-celebration-at-huejotzingo-carnival-36187015/",
+   "anchor": "L1-10_L2-10e_0005__scene_001",
+   "src": "media/rai/real-10e_0005-001.mp4",
+   "poster": "media/rai/real-10e_0005-001.webp"
+  }
+ ]
+}

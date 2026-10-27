@@ -195,7 +195,8 @@ body::before {
   letter-spacing: 0.16em;
   text-transform: uppercase;
   white-space: nowrap;
-  background: color-mix(in oklab, currentColor 10%, transparent);
+  /* a light backing keeps the stamp legible over dark footage */
+  background: color-mix(in oklab, currentColor 8%, rgba(255, 255, 255, 0.86));
   backdrop-filter: blur(2px);
   animation: stamp-in 0.55s var(--ease-out-expo) both;
   mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='60'%3E%3Cfilter id='r'%3E%3CfeTurbulence baseFrequency='.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.2 1.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23r)'/%3E%3C/svg%3E");
@@ -240,18 +241,20 @@ body::before {
   background: var(--ink);
   color: var(--paper);
 }
-.btn-dark:hover {
-  background: var(--fake);
-  border-color: var(--fake);
-  color: #fff;
+@media (hover: hover) {
+  .btn-dark:hover {
+    background: var(--fake);
+    border-color: var(--fake);
+    color: #fff;
+  }
+  .btn-line:hover {
+    background: var(--ink);
+    color: var(--paper);
+  }
 }
 .btn-line {
   background: transparent;
   color: var(--ink);
-}
-.btn-line:hover {
-  background: var(--ink);
-  color: var(--paper);
 }
 
 .link-u {
