@@ -294,7 +294,7 @@ export default function PhoneApp() {
         </PSection>
         <footer className="px-5 pt-8 pb-[calc(32px+env(safe-area-inset-bottom))] text-[12px] leading-relaxed text-ink-3">
           <Logo size={0.9} />
-          <p className="mt-3">Every clip comes from the public RA-Bench release; real footage shown is US-government public domain (DVIDS). The synthetic news badge's logo is blurred.</p>
+          <p className="mt-3">Every clip comes from the public RA-Bench release; real footage shown is US-government public domain (DVIDS).</p>
         </footer>
       </main>
     </>

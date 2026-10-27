@@ -39,6 +39,7 @@ export function DetectorDrop({ compact = false }: { compact?: boolean }) {
         <line x1={x(50)} x2={x(50)} y1={26} y2={H - 26} stroke="var(--fake)" strokeDasharray="3 4" strokeWidth={1.2} />
         <text x={x(50) + 6} y={30} className="fill-[var(--fake)] font-mono text-[10px] tracking-wider">50% = CHANCE</text>
         <text x={R} y={14} textAnchor="end" className="fill-[var(--ink-3)] font-mono text-[10px] tracking-wider">PAIRED AUC (%)</text>
+        {!compact && <text x={R + 40} y={30} textAnchor="end" className="fill-[var(--ink-3)] font-mono text-[10px] tracking-wider">Δ</text>}
         {rows.map((d, i) => {
           const y = 56 + i * rowH + (i === rows.length - 1 ? 10 : 0);
           const now = src === null ? mean(d.auc) : d.auc[src];

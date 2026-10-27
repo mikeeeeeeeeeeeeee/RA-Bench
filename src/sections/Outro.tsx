@@ -164,7 +164,7 @@ export function Footer() {
       <div className="flex flex-wrap items-center justify-between gap-6">
         <Logo />
         <p className="max-w-2xl text-[12px] leading-relaxed text-ink-3">
-          Real videos as Anchors for evaluating AI-generated video detection. Every clip on this page comes from the public RA-Bench release; real footage shown here is US-government public domain (DVIDS). The synthetic news badge's logo is blurred.
+          Real videos as Anchors for evaluating AI-generated video detection. Every clip on this page comes from the public RA-Bench release; real footage shown here is US-government public domain (DVIDS).
         </p>
         <motion.a href="#top" whileHover={{ y: -2 }} className="flex items-center gap-2 font-mono text-[11px] tracking-[0.12em] text-ink-2 uppercase">
           Back to top <span className="rotate-180"><Icon name="down" size={14} /></span>

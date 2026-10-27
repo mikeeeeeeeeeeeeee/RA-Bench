@@ -98,16 +98,16 @@ export function FilmPlayer({ compact = false }: { compact?: boolean }) {
         <span className="vf-c tl" /><span className="vf-c tr" /><span className="vf-c bl" /><span className="vf-c br" />
         <AnimatePresence>
           {!started && (
-            <motion.button onClick={play} initial={{ opacity: 1 }} exit={{ opacity: 0, scale: 1.04 }} transition={{ duration: 0.5 }} className="absolute inset-0 z-[5] grid place-items-center bg-gradient-to-t from-black/50 via-transparent to-transparent">
+            <motion.button onClick={play} initial={{ opacity: 1 }} exit={{ opacity: 0, scale: 1.04 }} transition={{ duration: 0.5 }} className="absolute inset-0 z-[5] grid place-items-center bg-[radial-gradient(ellipse_at_center,rgba(0,0,0,.05),rgba(0,0,0,.45))]">
               <span className={`relative grid ${compact ? 'h-[64px] w-[64px]' : 'h-[88px] w-[88px]'} place-items-center rounded-full bg-white text-[#101726] shadow-2xl transition-transform duration-500 group-hover:scale-110`}>
                 <span className="absolute inset-0 animate-ping rounded-full bg-white/40 [animation-duration:2.4s]" />
                 <Icon name="play" size={30} className="relative ml-1" />
               </span>
-              <span className={`absolute text-left ${compact ? 'bottom-3 left-4' : 'bottom-6 left-8'}`}>
-                <span className="kicker block text-white/70">Film · English narration · 中英字幕</span>
-                {!compact && <span className="font-display mt-1 block text-[clamp(1.4rem,2.6vw,2.4rem)] leading-tight">Can we defend against AI-generated crisis videos?</span>}
+              <span className={`absolute text-left ${compact ? 'bottom-5 left-8' : 'bottom-6 left-8'}`}>
+                <span className={`block font-mono tracking-[0.14em] text-white/85 uppercase ${compact ? 'text-[9.5px]' : 'text-[11px]'}`}>Film · English narration · 中英字幕</span>
+                
               </span>
-              <span className={`absolute font-mono text-[12px] text-white/80 ${compact ? 'right-4 bottom-3' : 'right-8 bottom-6'}`}>{fmtT(dur)}</span>
+              <span className={`absolute font-mono text-[12px] text-white/80 ${compact ? 'right-8 bottom-5' : 'right-8 bottom-6'}`}>{fmtT(dur)}</span>
             </motion.button>
           )}
         </AnimatePresence>

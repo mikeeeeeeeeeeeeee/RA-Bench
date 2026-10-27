@@ -21,6 +21,6 @@ Every push to `main` builds and deploys to GitHub Pages (`.github/workflows/depl
 ## Content
 
 - All numbers are in `src/data/results.ts` (copied from the paper's tables); paper metadata in `src/data/paper.ts`.
-- Every clip in `public/media/` is a file from the public RA-Bench release, re-encoded for the web. Real footage shown is US-government public domain (DVIDS). The LastMile news badge's logo is blurred.
+- Every clip in `public/media/` is a file from the public RA-Bench release, re-encoded for the web. Real footage shown is US-government public domain (DVIDS). LastMile clips are shown exactly as released.
 - The film (`public/film/`) has English narration with English + Chinese subtitles (`src/data/film-cues.json`, `public/film/*.vtt`).
 - Phones get their own layout (`src/phone/`); `?view=phone|desktop` forces one, and both layouts carry a switch. `?theme=dark` forces the dark theme.

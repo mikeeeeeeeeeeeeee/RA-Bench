@@ -22,7 +22,7 @@
   --chance: #a3a8b1;
   --screen: #0c1018;
   --screen-ink: #e8ecf3;
-  --glass: rgba(243, 241, 236, 0.72);
+  --glass: rgba(243, 241, 236, 0.9);
   --shadow: 0 1px 0 rgba(16, 23, 38, 0.04), 0 18px 40px -24px rgba(16, 23, 38, 0.28);
   --grain-opacity: 0.35;
   color-scheme: light;
@@ -46,7 +46,7 @@
   --chance: #5d6676;
   --screen: #05070b;
   --screen-ink: #e8ecf3;
-  --glass: rgba(10, 13, 19, 0.7);
+  --glass: rgba(10, 13, 19, 0.88);
   --shadow: 0 1px 0 rgba(255, 255, 255, 0.03), 0 24px 50px -28px rgba(0, 0, 0, 0.8);
   --grain-opacity: 0.18;
   color-scheme: dark;

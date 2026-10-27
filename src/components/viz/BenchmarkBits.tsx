@@ -70,7 +70,7 @@ export function DomainRibbon() {
           </motion.div>
         ))}
       </div>
-      <div className="mt-4 grid grid-cols-2 gap-x-6 gap-y-1.5 sm:grid-cols-5">
+      <div className="mt-4 grid grid-cols-2 gap-x-6 gap-y-1.5">
         {DOMAINS.map((d, i) => (
           <div key={d.code} onMouseEnter={() => setHot(i)} onMouseLeave={() => setHot(null)} className={`flex items-baseline justify-between gap-2 border-b py-1.5 text-[12.5px] transition-colors ${hot === i ? 'border-fake text-ink' : 'border-rule-2 text-ink-3'}`}>
             <span className="truncate">{d.name}</span>

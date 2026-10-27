@@ -1,4 +1,4 @@
-import { useCallback, useEffect, useRef, useState } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import { asset } from '@/lib/hooks';
 import { timecode } from '@/components/ui/Frame';
 
@@ -8,6 +8,10 @@ import { timecode } from '@/components/ui/Frame';
  * inside the lens is exactly what the generator invented. WebGL (two video textures, barrel distortion,
  * chromatic fringe at the rim, a short glitch when the generator changes); a CSS clip-path fallback
  * covers browsers without WebGL.
+ *
+ * The GL context is created once. Every generator's clip stays mounted and preloaded, so switching only
+ * changes which video feeds the texture; the real clip follows the generated one by nudging its playback
+ * rate (seeking every frame would stall it). The HUD is written straight to the DOM, not through React state.
  */
 
 const VERT = `attribute vec2 p; varying vec2 v; void main(){ v = p*0.5+0.5; gl_Position = vec4(p,0.,1.); }`;
@@ -69,74 +73,76 @@ export type LensGen = { key: string; name: string; src: string; dur: number };
 export function ForensicLens({ realSrc, realPoster, gens, className = '', compact = false }: { realSrc: string; realPoster?: string; gens: LensGen[]; className?: string; compact?: boolean }) {
   const wrap = useRef<HTMLDivElement>(null);
   const canvas = useRef<HTMLCanvasElement>(null);
-  const vGen = useRef<HTMLVideoElement>(null);
+  const vGens = useRef<(HTMLVideoElement | null)[]>([]);
   const vReal = useRef<HTMLVideoElement>(null);
+  const hudTime = useRef<HTMLSpanElement>(null);
+  const hudLabel = useRef<HTMLDivElement>(null);
+  const hudShared = useRef<HTMLDivElement>(null);
+  const hudHint = useRef<HTMLDivElement>(null);
   const [gi, setGi] = useState(0);
+  const active = useRef(0);
   const [gl, setGl] = useState<'pending' | 'ok' | 'none'>('pending');
+  const glRef = useRef<'pending' | 'ok' | 'none'>('pending');
   const [live, setLive] = useState(false);
-  const liveRef = useRef(false);
-  const [hud, setHud] = useState({ x: 0, y: 0, t: 0, r: 120, shared: true });
   const lens = useRef({ x: 0, y: 0, tx: 0, ty: 0, vx: 0, vy: 0, hover: false, idleAt: 0, touched: false });
   const glitch = useRef(0);
   const visible = useRef(false);
-  const gen = gens[gi];
+  const durs = useRef(gens.map((g) => g.dur));
 
-  // keep the two clips in step and loop both at the generated clip's end (the shared first frame)
-  const sync = useCallback(() => {
-    const g = vGen.current, r = vReal.current;
+  const restart = () => {
+    const g = vGens.current[active.current], r = vReal.current;
     if (!g || !r) return;
-    const dur = Math.min(gen.dur, r.duration || gen.dur) - 0.06;
-    if (g.currentTime >= dur || g.ended) {
-      g.currentTime = 0;
-      r.currentTime = 0;
+    g.currentTime = 0;
+    r.currentTime = 0;
+    r.playbackRate = 1;
+    if (visible.current) {
       g.play().catch(() => {});
       r.play().catch(() => {});
-    } else if (Math.abs(r.currentTime - g.currentTime) > 0.09) r.currentTime = g.currentTime;
-  }, [gen.dur]);
+    }
+  };
 
   useEffect(() => {
     const c = canvas.current!, w = wrap.current!;
     const g = c.getContext('webgl', { premultipliedAlpha: false, antialias: false, preserveDrawingBuffer: false });
-    if (!g) {
-      setGl('none');
-      return;
+    let prog: WebGLProgram | null = null;
+    if (g) {
+      const sh = (type: number, src: string) => {
+        const s = g.createShader(type)!;
+        g.shaderSource(s, src);
+        g.compileShader(s);
+        return s;
+      };
+      prog = g.createProgram()!;
+      g.attachShader(prog, sh(g.VERTEX_SHADER, VERT));
+      g.attachShader(prog, sh(g.FRAGMENT_SHADER, FRAG));
+      g.linkProgram(prog);
+      if (!g.getProgramParameter(prog, g.LINK_STATUS)) prog = null;
     }
-    setGl('ok');
-    const sh = (type: number, src: string) => {
-      const s = g.createShader(type)!;
-      g.shaderSource(s, src);
-      g.compileShader(s);
-      return s;
-    };
-    const prog = g.createProgram()!;
-    g.attachShader(prog, sh(g.VERTEX_SHADER, VERT));
-    g.attachShader(prog, sh(g.FRAGMENT_SHADER, FRAG));
-    g.linkProgram(prog);
-    if (!g.getProgramParameter(prog, g.LINK_STATUS)) {
-      setGl('none');
-      return;
+    glRef.current = g && prog ? 'ok' : 'none';
+    setGl(glRef.current);
+    let tex: WebGLTexture[] = [];
+    const U = (n: string) => (g && prog ? g.getUniformLocation(prog, n) : null);
+    if (g && prog) {
+      g.useProgram(prog);
+      g.bindBuffer(g.ARRAY_BUFFER, g.createBuffer());
+      g.bufferData(g.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), g.STATIC_DRAW);
+      const loc = g.getAttribLocation(prog, 'p');
+      g.enableVertexAttribArray(loc);
+      g.vertexAttribPointer(loc, 2, g.FLOAT, false, 0, 0);
+      tex = [0, 1].map((i) => {
+        const t = g.createTexture()!;
+        g.activeTexture(g.TEXTURE0 + i);
+        g.bindTexture(g.TEXTURE_2D, t);
+        g.texParameteri(g.TEXTURE_2D, g.TEXTURE_MIN_FILTER, g.LINEAR);
+        g.texParameteri(g.TEXTURE_2D, g.TEXTURE_MAG_FILTER, g.LINEAR);
+        g.texParameteri(g.TEXTURE_2D, g.TEXTURE_WRAP_S, g.CLAMP_TO_EDGE);
+        g.texParameteri(g.TEXTURE_2D, g.TEXTURE_WRAP_T, g.CLAMP_TO_EDGE);
+        g.texImage2D(g.TEXTURE_2D, 0, g.RGBA, 1, 1, 0, g.RGBA, g.UNSIGNED_BYTE, new Uint8Array([12, 16, 24, 255]));
+        return t;
+      });
+      g.uniform1i(U('uGen'), 0);
+      g.uniform1i(U('uReal'), 1);
     }
-    g.useProgram(prog);
-    const buf = g.createBuffer();
-    g.bindBuffer(g.ARRAY_BUFFER, buf);
-    g.bufferData(g.ARRAY_BUFFER, new Float32Array([-1, -1, 1, -1, -1, 1, 1, 1]), g.STATIC_DRAW);
-    const loc = g.getAttribLocation(prog, 'p');
-    g.enableVertexAttribArray(loc);
-    g.vertexAttribPointer(loc, 2, g.FLOAT, false, 0, 0);
-    const tex = [0, 1].map((i) => {
-      const t = g.createTexture()!;
-      g.activeTexture(g.TEXTURE0 + i);
-      g.bindTexture(g.TEXTURE_2D, t);
-      g.texParameteri(g.TEXTURE_2D, g.TEXTURE_MIN_FILTER, g.LINEAR);
-      g.texParameteri(g.TEXTURE_2D, g.TEXTURE_MAG_FILTER, g.LINEAR);
-      g.texParameteri(g.TEXTURE_2D, g.TEXTURE_WRAP_S, g.CLAMP_TO_EDGE);
-      g.texParameteri(g.TEXTURE_2D, g.TEXTURE_WRAP_T, g.CLAMP_TO_EDGE);
-      g.texImage2D(g.TEXTURE_2D, 0, g.RGBA, 1, 1, 0, g.RGBA, g.UNSIGNED_BYTE, new Uint8Array([12, 16, 24, 255]));
-      return t;
-    });
-    const U = (n: string) => g.getUniformLocation(prog, n);
-    g.uniform1i(U('uGen'), 0);
-    g.uniform1i(U('uReal'), 1);
     let W = 0, H = 0, dpr = 1;
     const resize = () => {
       dpr = Math.min(2, devicePixelRatio || 1);
@@ -145,7 +151,7 @@ export function ForensicLens({ realSrc, realPoster, gens, className = '', compac
       H = r.height;
       c.width = Math.round(W * dpr);
       c.height = Math.round(H * dpr);
-      g.viewport(0, 0, c.width, c.height);
+      g?.viewport(0, 0, c.width, c.height);
       const L = lens.current;
       if (!L.touched) {
         L.x = L.tx = W * 0.62;
@@ -157,16 +163,26 @@ export function ForensicLens({ realSrc, realPoster, gens, className = '', compac
     ro.observe(w);
     const io = new IntersectionObserver(([e]) => {
       visible.current = e.isIntersecting;
-      const vs = [vGen.current, vReal.current];
+      const vs = [vGens.current[active.current], vReal.current];
       vs.forEach((v) => v && (e.isIntersecting ? v.play().catch(() => {}) : v.pause()));
     });
     io.observe(w);
-    let raf = 0, last = performance.now(), open = 0;
+    let raf = 0, last = performance.now(), open = 0, isLive = false, shown = true;
     const t0 = performance.now();
     const scale = (v: HTMLVideoElement | null) => {
       if (!v || !v.videoWidth) return [1, 1];
       const va = v.videoWidth / v.videoHeight, ca = W / H;
       return va > ca ? [ca / va, 1] : [1, va / ca];
+    };
+    // the real clip follows the generated one: small drift is absorbed by the playback rate, large drift by one seek
+    const follow = (gv: HTMLVideoElement, rv: HTMLVideoElement) => {
+      const end = Math.min(gv.duration || durs.current[active.current], rv.duration || 99) - 0.08;
+      if (gv.ended || gv.currentTime >= end) return restart();
+      if (gv.seeking || rv.seeking || gv.paused) return;
+      if (rv.paused) rv.play().catch(() => {});
+      const drift = rv.currentTime - gv.currentTime;
+      if (Math.abs(drift) > 0.35) rv.currentTime = gv.currentTime;
+      else rv.playbackRate = Math.abs(drift) < 0.025 ? 1 : Math.max(0.8, Math.min(1.2, 1 - drift * 2));
     };
     const frame = (now: number) => {
       raf = requestAnimationFrame(frame);
@@ -186,55 +202,77 @@ export function ForensicLens({ realSrc, realPoster, gens, className = '', compac
       L.x += L.vx * dt;
       L.y += L.vy * dt;
       open += (1 - open) * Math.min(1, dt * 2.2);
-      glitch.current = Math.max(0, glitch.current - dt * 2.2);
-      const g1 = vGen.current, r1 = vReal.current;
-      sync();
+      glitch.current = Math.max(0, glitch.current - dt * 2.4);
+      const g1 = vGens.current[active.current], r1 = vReal.current;
+      if (g1 && r1) follow(g1, r1);
       // until both clips can be drawn, the shared first frame (the poster) stands in
-      if (!liveRef.current && g1 && r1 && g1.readyState >= 2 && r1.readyState >= 2) {
-        liveRef.current = true;
+      if (!isLive && g1 && r1 && g1.readyState >= 2 && r1.readyState >= 2) {
+        isLive = true;
         setLive(true);
+        // the other generators load now, so a later switch is instant
+        vGens.current.forEach((v) => v && v.preload !== 'auto' && (v.preload = 'auto'));
       }
-      [g1, r1].forEach((v, i) => {
-        if (v && v.readyState >= 2) {
-          g.activeTexture(g.TEXTURE0 + i);
-          g.bindTexture(g.TEXTURE_2D, tex[i]);
-          g.texImage2D(g.TEXTURE_2D, 0, g.RGBA, g.RGBA, g.UNSIGNED_BYTE, v);
-        }
-      });
       const R = Math.min(W, H) * (compact ? 0.3 : 0.27);
-      const sg = scale(g1), sr = scale(r1);
-      g.uniform2f(U('uRes'), W * dpr, H * dpr);
-      g.uniform2f(U('uLens'), L.x * dpr, L.y * dpr);
-      g.uniform2f(U('uScaleG'), sg[0], sg[1]);
-      g.uniform2f(U('uScaleR'), sr[0], sr[1]);
-      g.uniform1f(U('uR'), R * dpr);
-      g.uniform1f(U('uOpen'), open);
-      g.uniform1f(U('uTime'), time);
-      g.uniform1f(U('uGlitch'), glitch.current);
-      g.uniform1f(U('uDark'), 1);
-      g.drawArrays(g.TRIANGLE_STRIP, 0, 4);
+      if (g && prog) {
+        [g1, r1].forEach((v, i) => {
+          if (v && v.readyState >= 2) {
+            g.activeTexture(g.TEXTURE0 + i);
+            g.bindTexture(g.TEXTURE_2D, tex[i]);
+            g.texImage2D(g.TEXTURE_2D, 0, g.RGBA, g.RGBA, g.UNSIGNED_BYTE, v);
+          }
+        });
+        const sg = scale(g1), sr = scale(r1);
+        g.uniform2f(U('uRes'), W * dpr, H * dpr);
+        g.uniform2f(U('uLens'), L.x * dpr, L.y * dpr);
+        g.uniform2f(U('uScaleG'), sg[0], sg[1]);
+        g.uniform2f(U('uScaleR'), sr[0], sr[1]);
+        g.uniform1f(U('uR'), R * dpr);
+        g.uniform1f(U('uOpen'), open);
+        g.uniform1f(U('uTime'), time);
+        g.uniform1f(U('uGlitch'), glitch.current);
+        g.uniform1f(U('uDark'), 1);
+        g.drawArrays(g.TRIANGLE_STRIP, 0, 4);
+      } else if (r1) {
+        r1.style.clipPath = `circle(${R * open}px at ${L.x}px ${L.y}px)`;
+      }
+      // HUD, straight to the DOM
       const t = g1?.currentTime ?? 0;
-      setHud((h) => (Math.abs(h.x - L.x) > 0.5 || Math.abs(h.y - L.y) > 0.5 || Math.abs(h.t - t) > 0.03 || h.r !== R ? { x: L.x, y: L.y, t, r: R, shared: t < 0.35 } : h));
+      if (hudTime.current) hudTime.current.textContent = timecode(t);
+      if (hudLabel.current) {
+        hudLabel.current.style.left = `${L.x}px`;
+        hudLabel.current.style.top = `${Math.max(compact ? 30 : 44, L.y - R - (compact ? 24 : 30))}px`;
+      }
+      const sh = t < 0.35;
+      if (sh !== shown) {
+        shown = sh;
+        hudShared.current?.style.setProperty('opacity', sh ? '1' : '0');
+        hudHint.current?.style.setProperty('opacity', sh ? '0' : '0.8');
+      }
     };
     raf = requestAnimationFrame(frame);
     return () => {
       cancelAnimationFrame(raf);
       ro.disconnect();
       io.disconnect();
-      g.getExtension('WEBGL_lose_context')?.loseContext();
     };
-  }, [sync, compact]);
+    // the GL setup runs once; everything that changes later is read from refs
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
-  // switching the generator: restart both clips together and flash the glitch
-  useEffect(() => {
-    glitch.current = 1;
-    const g = vGen.current, r = vReal.current;
-    if (g && r) {
-      r.currentTime = 0;
-      g.play().catch(() => {});
-      r.play().catch(() => {});
+  const pick = (i: number) => {
+    if (i === active.current) return;
+    const prev = vGens.current[active.current];
+    if (prev) {
+      prev.pause();
+      prev.currentTime = 0;
     }
-  }, [gi]);
+    active.current = i;
+    setGi(i);
+    glitch.current = 1;
+    const next = vGens.current[i];
+    if (next && next.preload !== 'auto') next.preload = 'auto';
+    restart();
+  };
 
   const move = (x: number, y: number) => {
     const r = wrap.current!.getBoundingClientRect();
@@ -248,6 +286,7 @@ export function ForensicLens({ realSrc, realPoster, gens, className = '', compac
     lens.current.hover = false;
     lens.current.idleAt = performance.now();
   };
+  const fallback = gl === 'none';
 
   return (
     <div className={className}>
@@ -259,38 +298,51 @@ export function ForensicLens({ realSrc, realPoster, gens, className = '', compac
         onPointerLeave={leave}
         onPointerUp={(e) => e.pointerType !== 'mouse' && leave()}
       >
-        <video ref={vGen} key={gen.src} src={asset(gen.src)} muted playsInline autoPlay preload="auto" crossOrigin="anonymous" className={gl === 'none' ? 'absolute inset-0 h-full w-full object-cover' : 'hidden'} />
-        <video ref={vReal} src={asset(realSrc)} poster={realPoster ? asset(realPoster) : undefined} muted playsInline autoPlay preload="auto" crossOrigin="anonymous"
-          className={gl === 'none' ? 'absolute inset-0 h-full w-full object-cover' : 'hidden'}
-          style={gl === 'none' ? { clipPath: `circle(${hud.r}px at ${hud.x}px ${hud.y}px)` } : undefined} />
-        {realPoster && <img src={asset(realPoster)} alt="" className="absolute inset-0 h-full w-full object-cover" />}
-        <canvas ref={canvas} className={`absolute inset-0 h-full w-full transition-opacity duration-700 ${gl === 'none' ? 'hidden' : ''} ${live ? 'opacity-100' : 'opacity-0'}`} />
+        {/* every clip stays mounted (under the canvas, so browsers keep decoding it); only the active generator plays */}
+        {gens.map((x, i) => (
+          <video
+            key={x.key}
+            ref={(el) => {
+              vGens.current[i] = el;
+            }}
+            src={asset(x.src)}
+            muted
+            playsInline
+            autoPlay={i === 0}
+            preload={i === 0 ? 'auto' : 'metadata'}
+            crossOrigin="anonymous"
+            className={`absolute inset-0 h-full w-full object-cover ${i === gi ? 'opacity-100' : 'opacity-0'}`}
+          />
+        ))}
+        <video ref={vReal} src={asset(realSrc)} muted playsInline autoPlay preload="auto" crossOrigin="anonymous" className={`absolute inset-0 h-full w-full object-cover ${fallback ? '' : 'opacity-0'}`} />
+        {realPoster && <img src={asset(realPoster)} alt="" className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${live ? 'opacity-0' : 'opacity-100'}`} />}
+        <canvas ref={canvas} className={`absolute inset-0 h-full w-full transition-opacity duration-700 ${fallback ? 'hidden' : ''} ${live ? 'opacity-100' : 'opacity-0'}`} />
         <span className="vf-c tl" /><span className="vf-c tr" /><span className="vf-c bl" /><span className="vf-c br" />
         {/* HUD */}
         <div className={`pointer-events-none absolute inset-x-0 top-0 z-[4] flex items-start justify-between font-mono uppercase ${compact ? 'px-5 pt-4 text-[9px] tracking-[0.1em]' : 'px-8 pt-5 text-[10.5px] tracking-[0.14em]'}`}>
           <span className="flex items-center gap-2 rounded-[2px] bg-black/55 px-2 py-1 backdrop-blur-sm">
             <span className="h-2 w-2 rounded-full bg-[var(--fake)] shadow-[0_0_10px_var(--fake)]" />
-            {compact ? gen.name : `Generated · ${gen.name}`}
+            {compact ? gens[gi].name : `Generated · ${gens[gi].name}`}
           </span>
-          {!compact && <span className="tnum rounded-[2px] bg-black/45 px-2 py-1 backdrop-blur-sm">{timecode(hud.t)}</span>}
+          {!compact && <span ref={hudTime} className="tnum rounded-[2px] bg-black/45 px-2 py-1 backdrop-blur-sm">{timecode(0)}</span>}
         </div>
         {/* the lens label rides on the rim */}
-        <div className={`pointer-events-none absolute z-[5] -translate-x-1/2 font-mono uppercase ${compact ? 'text-[8.5px] tracking-[0.1em]' : 'text-[10px] tracking-[0.16em]'}`} style={{ left: hud.x, top: Math.max(compact ? 30 : 44, hud.y - hud.r - (compact ? 24 : 30)) }}>
+        <div ref={hudLabel} className={`pointer-events-none absolute z-[5] -translate-x-1/2 font-mono uppercase ${compact ? 'text-[8.5px] tracking-[0.1em]' : 'text-[10px] tracking-[0.16em]'}`}>
           <span className="flex items-center gap-1.5 rounded-full bg-[var(--real)] px-2.5 py-1 text-white shadow-lg">
             <span className="h-1.5 w-1.5 rounded-full bg-white" /> Real footage
           </span>
         </div>
-        <div className={`pointer-events-none absolute z-[4] font-mono uppercase transition-opacity duration-300 ${compact ? 'bottom-3 left-5 text-[9px] tracking-[0.1em]' : 'bottom-5 left-8 text-[10.5px] tracking-[0.14em]'} ${hud.shared ? 'opacity-100' : 'opacity-0'}`}>
+        <div ref={hudShared} className={`pointer-events-none absolute z-[4] font-mono uppercase transition-opacity duration-300 ${compact ? 'bottom-3 left-5 text-[9px] tracking-[0.1em]' : 'bottom-5 left-8 text-[10.5px] tracking-[0.14em]'}`}>
           <span className="rounded-[2px] bg-white px-2 py-1 text-[#101726]">t = 0 · shared first frame</span>
         </div>
-        <div className={`pointer-events-none absolute z-[4] font-mono uppercase transition-opacity duration-300 ${compact ? 'right-5 bottom-3 text-[9px] tracking-[0.1em]' : 'right-8 bottom-5 text-[10.5px] tracking-[0.14em]'} ${hud.shared ? 'opacity-0' : 'opacity-80'}`}>
+        <div ref={hudHint} style={{ opacity: 0 }} className={`pointer-events-none absolute z-[4] font-mono uppercase transition-opacity duration-300 ${compact ? 'right-5 bottom-3 text-[9px] tracking-[0.1em]' : 'right-8 bottom-5 text-[10.5px] tracking-[0.14em]'}`}>
           {compact ? 'Drag the lens' : 'Move the lens to see what really happened'}
         </div>
       </div>
       <div className="mt-3 flex flex-wrap items-center gap-2">
         <span className="kicker mr-1">{compact ? 'Generator' : 'Generated by'}</span>
         {gens.map((x, i) => (
-          <button key={x.key} onClick={() => setGi(i)} className={`h-8 rounded-full border px-3 font-mono text-[11px] tracking-[0.08em] transition-all ${i === gi ? 'border-fake bg-fake text-white' : 'border-rule text-ink-2 hover:border-ink'}`}>
+          <button key={x.key} onClick={() => pick(i)} aria-pressed={i === gi} className={`h-8 rounded-full border px-3 font-mono text-[11px] tracking-[0.08em] transition-all ${i === gi ? 'border-fake bg-fake text-white' : 'border-rule text-ink-2 hover:border-ink'}`}>
             {x.name}
           </button>
         ))}

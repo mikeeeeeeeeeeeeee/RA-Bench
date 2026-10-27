@@ -19,7 +19,7 @@ function Row({ claim, figure, flip = false }: { claim: ReactNode; figure: ReactN
 
 function FindingHead({ id, n, title, accent, lede }: { id: string; n: string; title: string; accent?: string; lede: string }) {
   return (
-    <div id={id} className="scroll-mt-24 pt-28 pb-10">
+    <div id={id} className="scroll-mt-24 pt-24 pb-10">
       <Reveal>
         <div className="flex items-center gap-4">
           <span className="font-display text-[88px] leading-[0.8] text-fake italic">{n}</span>
@@ -71,7 +71,7 @@ export function Findings() {
       <div className="space-y-20">
         <Row
           claim={
-            <Claim tag="1a · Traditional detectors" title="Public benchmark scores do not survive real anchors." stat={<>84.2 <span className="text-ink-4">→</span> 51.3</>} statNote="7-detector mean AUC · public reference → RA-Bench (9-generator mean)" more={<>For 26 of the 63 detector–generator pairs, AUC is below 50%: generated clips score as <i>less</i> fake than their real anchors. Rankings do not transfer either (Spearman 0.26): UnivFD drops from 2nd to 6th, NPR rises from 6th to 3rd, and the leader changes with the generator. At 5% false positives the seven-detector mean catches only 2.8–7.5% of generated clips.</>}>
+            <Claim tag="1a · Traditional detectors" title="Public benchmark scores do not survive real anchors." stat={<>84.2 <span className="text-ink-4">→</span> 51.3</>} statNote="7-detector mean AUC · public ref. → RA-Bench" more={<>For 26 of the 63 detector–generator pairs, AUC is below 50%: generated clips score as <i>less</i> fake than their real anchors. Rankings do not transfer either (Spearman 0.26): UnivFD drops from 2nd to 6th, NPR rises from 6th to 3rd, and the leader changes with the generator. At 5% false positives the seven-detector mean catches only 2.8–7.5% of generated clips.</>}>
               Seven detectors that reach 67.6–98.6 AUC on public benchmarks average 43.9–57.3 per generator here. Pick a generator to see it alone.
             </Claim>
           }

@@ -11,7 +11,7 @@ const ease = [0.16, 1, 0.3, 1] as const;
 /* ------------------------------------------------------------------ Finding 2: conditioning */
 
 function SmallLines({ title, unit, series, meanSeries, sel, color, on, w = 300 }: { title: string; unit: string; series: { name: string; v: number[] }[]; meanSeries: number[]; sel: number; color: string; on: boolean; w?: number }) {
-  const h = 210, l = 34, r = w - 14, t = 22, b = h - 30;
+  const h = 210, l = 34, r = w - 44, t = 22, b = h - 30;
   const X = (i: number) => l + (i / 2) * (r - l);
   const Y = (v: number) => b - (v / 100) * (b - t);
   const path = (v: number[]) => v.map((y, i) => `${i ? 'L' : 'M'}${X(i)},${Y(y)}`).join(' ');
@@ -146,7 +146,7 @@ export function HumanBars({ compact = false }: { compact?: boolean }) {
                 )}
                 <span className="absolute top-[-4px] bottom-[-4px] left-1/2 w-px bg-ink" />
               </div>
-              <span className="tnum text-right font-mono text-[12.5px]">{r.gen}%</span>
+              <span className="tnum text-right font-mono text-[12.5px]">{r.gen.toFixed(1)}%</span>
             </div>
           );
         })}
@@ -157,7 +157,7 @@ export function HumanBars({ compact = false }: { compact?: boolean }) {
           <motion.div className="h-full bg-real" initial={{ width: 0 }} animate={on ? { width: `${HUMAN.realVideos.gen}%` } : {}} transition={{ duration: 1, delay: 0.7, ease }} />
           <span className="absolute top-[-4px] bottom-[-4px] left-1/2 w-px bg-ink" />
         </div>
-        <span className="tnum text-right font-mono text-[12.5px] text-real">{HUMAN.realVideos.gen}%</span>
+        <span className="tnum text-right font-mono text-[12.5px] text-real">{HUMAN.realVideos.gen.toFixed(1)}%</span>
       </div>
       {!compact && <p className="mt-3 text-[12.5px] text-ink-3">{HUMAN.reviewers} reviewers, three judgments per video, sources hidden. Hover a bar for the Real / Uncertain / Generated split. Even real crisis footage was called generated 22.8% of the time.</p>}
     </div>
@@ -181,7 +181,7 @@ export function HumanProofMeters() {
             <div className="mb-1 flex justify-between text-[12.5px]">
               <span className="text-ink-2">{d.name}</span>
               <span className="tnum font-mono text-[11px] text-ink-3">
-                {d.ref} → <b className="text-ink">{d.hp}</b> {d.metric}
+                {d.ref.toFixed(1)} → <b className="text-ink">{d.hp.toFixed(1)}</b> {d.metric}
               </span>
             </div>
             <div className="relative h-[10px] rounded-full bg-paper-2">
@@ -290,7 +290,7 @@ export function LastMile({ compact = false }: { compact?: boolean }) {
               <Icon name="replay" size={13} /> Replay the chain
             </button>
           </div>
-          <p className="mt-2 text-[11.5px] text-ink-3">The released RA-Bench-LastMile files, shown at their own resolution and frame rate. The synthetic badge's logo is blurred on this page.</p>
+          <p className="mt-2 text-[11.5px] text-ink-3">The released RA-Bench-LastMile files, as released, at their own resolution and frame rate. As in the paper, the news badge is an experimental presentation cue and implies no affiliation with any news organization.</p>
         </div>
 
         <div>
