@@ -1,0 +1,254 @@
+{
+ "hero": {
+  "id": "L1-01_L2-01b_0014__scene_009",
+  "real": {
+   "src": "media/hero-real.mp4",
+   "poster": "media/hero-real.webp",
+   "dur": 6.07
+  },
+  "gens": [
+   {
+    "key": "seedance2",
+    "name": "Seedance 2.0",
+    "src": "media/hero-seedance2.mp4",
+    "dur": 4.04
+   },
+   {
+    "key": "kling_v3",
+    "name": "Kling",
+    "src": "media/hero-kling_v3.mp4",
+    "dur": 3.04
+   },
+   {
+    "key": "hailuo_2_3_fast",
+    "name": "Hailuo",
+    "src": "media/hero-hailuo_2_3_fast.mp4",
+    "dur": 5.88
+   }
+  ]
+ },
+ "game": [
+  {
+   "id": "L1-02_L2-02a_0008__scene_005",
+   "gen": "Kling",
+   "genKey": "kling_v3",
+   "dur": 3.04,
+   "real": "media/game0-real.mp4",
+   "fake": "media/game0-gen.mp4",
+   "realPoster": "media/game0-real.webp",
+   "fakePoster": "media/game0-gen.webp"
+  },
+  {
+   "id": "L1-04_L2-04a_0008__scene_002",
+   "gen": "Runway",
+   "genKey": "runway",
+   "dur": 4.04,
+   "real": "media/game1-real.mp4",
+   "fake": "media/game1-gen.mp4",
+   "realPoster": "media/game1-real.webp",
+   "fakePoster": "media/game1-gen.webp"
+  },
+  {
+   "id": "L1-02_L2-02c_0010__scene_005",
+   "gen": "Kling",
+   "genKey": "kling_v3",
+   "dur": 8.04,
+   "real": "media/game2-real.mp4",
+   "fake": "media/game2-gen.mp4",
+   "realPoster": "media/game2-real.webp",
+   "fakePoster": "media/game2-gen.webp"
+  },
+  {
+   "id": "L1-01_L2-01b_0005__scene_014",
+   "gen": "Seedance 2.0",
+   "genKey": "seedance2",
+   "dur": 4.04,
+   "real": "media/game3-real.mp4",
+   "fake": "media/game3-gen.mp4",
+   "realPoster": "media/game3-real.webp",
+   "fakePoster": "media/game3-gen.webp"
+  },
+  {
+   "id": "L1-02_L2-02d_0002__scene_010",
+   "gen": "Hailuo",
+   "genKey": "hailuo_2_3_fast",
+   "dur": 5.88,
+   "real": "media/game4-real.mp4",
+   "fake": "media/game4-gen.mp4",
+   "realPoster": "media/game4-real.webp",
+   "fakePoster": "media/game4-gen.webp"
+  }
+ ],
+ "wall": {
+  "id": "L1-09_L2-09a_0008__scene_001",
+  "tiles": [
+   {
+    "key": "real",
+    "name": "Real",
+    "src": "media/wall-real.mp4",
+    "poster": "media/wall-real.webp"
+   },
+   {
+    "key": "wan22_dynamic_seed0",
+    "name": "Wan2.2",
+    "src": "media/wall-wan22_dynamic_seed0.mp4",
+    "poster": "media/wall-wan22_dynamic_seed0.webp",
+    "aspect": 1.793
+   },
+   {
+    "key": "wan22_lightning_seed0",
+    "name": "Wan2.2-Lightning",
+    "src": "media/wall-wan22_lightning_seed0.mp4",
+    "poster": "media/wall-wan22_lightning_seed0.webp",
+    "aspect": 1.778
+   },
+   {
+    "key": "ltx_seed0",
+    "name": "LTX",
+    "src": "media/wall-ltx_seed0.mp4",
+    "poster": "media/wall-ltx_seed0.webp",
+    "aspect": 1.5
+   },
+   {
+    "key": "omniweaving_seed0",
+    "name": "OmniWeaving",
+    "src": "media/wall-omniweaving_seed0.mp4",
+    "poster": "media/wall-omniweaving_seed0.webp",
+    "aspect": 1.767
+   },
+   {
+    "key": "happy_horse",
+    "name": "HappyHorse",
+    "src": "media/wall-happy_horse.mp4",
+    "poster": "media/wall-happy_horse.webp",
+    "aspect": 1.732
+   },
+   {
+    "key": "runway",
+    "name": "Runway",
+    "src": "media/wall-runway.mp4",
+    "poster": "media/wall-runway.webp",
+    "aspect": 1.778
+   },
+   {
+    "key": "kling_v3",
+    "name": "Kling",
+    "src": "media/wall-kling_v3.mp4",
+    "poster": "media/wall-kling_v3.webp",
+    "aspect": 1.736
+   },
+   {
+    "key": "seedance2",
+    "name": "Seedance 2.0",
+    "src": "media/wall-seedance2.mp4",
+    "poster": "media/wall-seedance2.webp",
+    "aspect": 1.778
+   },
+   {
+    "key": "hailuo_2_3_fast",
+    "name": "Hailuo",
+    "src": "media/wall-hailuo_2_3_fast.mp4",
+    "poster": "media/wall-hailuo_2_3_fast.webp",
+    "aspect": 1.732
+   }
+  ]
+ },
+ "lastmile": {
+  "T0-real": {
+   "src": "media/lm-T0-real.mp4",
+   "poster": "media/lm-T0-real.webp",
+   "w": 1280,
+   "h": 720,
+   "fps": 29.97,
+   "dur": 6.07
+  },
+  "T0-gen": {
+   "src": "media/lm-T0-gen.mp4",
+   "poster": "media/lm-T0-gen.webp",
+   "w": 1280,
+   "h": 720,
+   "fps": 24.0,
+   "dur": 4.04
+  },
+  "T1-real": {
+   "src": "media/lm-T1-real.mp4",
+   "poster": "media/lm-T1-real.webp",
+   "w": 1280,
+   "h": 720,
+   "fps": 29.97,
+   "dur": 6.04
+  },
+  "T1-gen": {
+   "src": "media/lm-T1-gen.mp4",
+   "poster": "media/lm-T1-gen.webp",
+   "w": 1280,
+   "h": 720,
+   "fps": 24.0,
+   "dur": 4.04
+  },
+  "T2-real": {
+   "src": "media/lm-T2-real.mp4",
+   "poster": "media/lm-T2-real.webp",
+   "w": 640,
+   "h": 360,
+   "fps": 29.97,
+   "dur": 6.04
+  },
+  "T2-gen": {
+   "src": "media/lm-T2-gen.mp4",
+   "poster": "media/lm-T2-gen.webp",
+   "w": 640,
+   "h": 360,
+   "fps": 24.0,
+   "dur": 4.04
+  },
+  "T3-real": {
+   "src": "media/lm-T3-real.mp4",
+   "poster": "media/lm-T3-real.webp",
+   "w": 1280,
+   "h": 720,
+   "fps": 8.0,
+   "dur": 6.13
+  },
+  "T3-gen": {
+   "src": "media/lm-T3-gen.mp4",
+   "poster": "media/lm-T3-gen.webp",
+   "w": 1280,
+   "h": 720,
+   "fps": 8.0,
+   "dur": 4.0
+  },
+  "T4-real": {
+   "src": "media/lm-T4-real.mp4",
+   "poster": "media/lm-T4-real.webp",
+   "w": 1280,
+   "h": 720,
+   "fps": 29.97,
+   "dur": 6.04
+  },
+  "T4-gen": {
+   "src": "media/lm-T4-gen.mp4",
+   "poster": "media/lm-T4-gen.webp",
+   "w": 1280,
+   "h": 720,
+   "fps": 24.0,
+   "dur": 4.04
+  },
+  "T5-real": {
+   "src": "media/lm-T5-real.mp4",
+   "poster": "media/lm-T5-real.webp",
+   "w": 640,
+   "h": 360,
+   "fps": 8.0,
+   "dur": 6.13
+  },
+  "T5-gen": {
+   "src": "media/lm-T5-gen.mp4",
+   "poster": "media/lm-T5-gen.webp",
+   "w": 640,
+   "h": 360,
+   "fps": 8.0,
+   "dur": 4.0
+  }
+ }
+}

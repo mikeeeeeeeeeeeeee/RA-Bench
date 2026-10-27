@@ -1,0 +1,97 @@
+WEBVTT
+
+00:00:01.200 --> 00:00:05.323
+A wildfire. A night checkpoint. A rocket on the pad.
+一场山火。一处夜间检查站。一枚待发射的火箭。
+
+00:00:05.600 --> 00:00:07.335
+Some of this footage is real.
+其中一些画面是真实的。
+
+00:00:07.375 --> 00:00:10.192
+The rest was generated from a single real frame.
+其余的，只由一帧真实画面生成。
+
+00:00:11.600 --> 00:00:16.272
+So: can we defend against AI-generated videos of real crises?
+那么：面对真实危机事件的 AI 生成视频，我们防得住吗？
+
+00:00:17.400 --> 00:00:20.164
+RA-Bench uses real videos as anchors.
+RA-Bench 以真实视频为锚点。
+
+00:00:20.204 --> 00:00:22.789
+1,830 real clips across ten kinds of crisis
+覆盖十类危机的 1,830 段真实片段，
+
+00:00:22.829 --> 00:00:27.697
+each hand their first frame and a shared caption to nine video generators.
+每段都把首帧和同一段描述交给九个视频生成器。
+
+00:00:27.800 --> 00:00:32.851
+16,056 forgeries that start exactly where reality does.
+16,056 段伪造视频，每一段都从现实所在之处开始。
+
+00:00:33.501 --> 00:00:36.130
+We tested three families of detectors.
+我们测试了三类检测器。
+
+00:00:36.170 --> 00:00:40.100
+Traditional detectors that score up to 98.6 on public benchmarks
+在公开基准上最高能达到 98.6 的传统检测器，
+
+00:00:40.140 --> 00:00:41.730
+fall to near chance.
+在这里跌到接近随机。
+
+00:00:41.980 --> 00:00:46.106
+Zero-shot multimodal models flip their verdicts when the prompt changes.
+零样本多模态大模型，换一种提问方式，结论就会翻转。
+
+00:00:46.400 --> 00:00:50.084
+And a fine-tuned detector was partly reading timestamps.
+而一个微调检测器，其实部分在“读时间戳”。
+
+00:00:50.124 --> 00:00:54.125
+Swap them for frame indices, and its edge disappears.
+换成帧序号，它的优势就消失了。
+
+00:00:54.600 --> 00:00:56.896
+The more real footage a forgery starts from,
+伪造视频依据的真实画面越多，
+
+00:00:56.936 --> 00:01:01.211
+the less fine-tuned detectors flag it: from seventy percent to twenty-eight.
+微调检测器标记出的就越少：从 70% 降到 28%。
+
+00:01:03.400 --> 00:01:04.943
+People are fooled too.
+人也会被骗。
+
+00:01:04.983 --> 00:01:09.580
+633 generated clips were judged real by all five reviewers.
+有 633 段生成视频，被全部五位评审判为真实。
+
+00:01:09.630 --> 00:01:15.180
+On those, even Gemini, the strongest zero-shot model, does little better than a coin flip.
+在这些视频上，即使是最强的零样本模型 Gemini，也只比抛硬币好一点。
+
+00:01:15.730 --> 00:01:17.239
+Then the video gets shared:
+接着，视频被转发：
+
+00:01:17.279 --> 00:01:20.760
+re-encoded, downscaled, badged like the news.
+被重新编码、缩小分辨率、加上新闻角标。
+
+00:01:20.810 --> 00:01:25.651
+Fine-tuned detectors’ fake recall falls from 46 percent to 1.4.
+微调检测器的伪造召回率，从 46% 跌到 1.4%。
+
+00:01:26.301 --> 00:01:28.659
+Detection has to survive the real world.
+检测，必须经得起真实世界的考验。
+
+00:01:28.699 --> 00:01:32.058
+RA-Bench is open. Put your detector to the test.
+RA-Bench 已开放。来检验你的检测器吧。

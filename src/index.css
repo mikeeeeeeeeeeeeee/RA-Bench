@@ -1,0 +1,291 @@
+@import 'tailwindcss';
+
+/* ------------------------------------------------------------------ design tokens
+   Light: "evidence paper" — warm newsprint, ink navy, cobalt for REAL, vermilion for GENERATED.
+   Dark:  "monitor room"   — blue-black glass, the same two signal colours, lifted. */
+:root {
+  --paper: #f3f1ec;
+  --paper-2: #ebe8e1;
+  --card: #fbfaf7;
+  --ink: #101726;
+  --ink-2: #384152;
+  --ink-3: #6b7280;
+  --ink-4: #9aa0aa;
+  --rule: #d6d1c6;
+  --rule-2: #e4e0d7;
+  --real: #2246b8;
+  --real-soft: #dfe6fb;
+  --fake: #ee4a22;
+  --fake-soft: #fde2d8;
+  --amber: #c98a0b;
+  --teal: #0e8a7e;
+  --chance: #a3a8b1;
+  --screen: #0c1018;
+  --screen-ink: #e8ecf3;
+  --glass: rgba(243, 241, 236, 0.72);
+  --shadow: 0 1px 0 rgba(16, 23, 38, 0.04), 0 18px 40px -24px rgba(16, 23, 38, 0.28);
+  --grain-opacity: 0.35;
+  color-scheme: light;
+}
+:root[data-theme='dark'] {
+  --paper: #0a0d13;
+  --paper-2: #0f131b;
+  --card: #121722;
+  --ink: #eef1f6;
+  --ink-2: #bcc3cf;
+  --ink-3: #7f8898;
+  --ink-4: #566070;
+  --rule: #232a37;
+  --rule-2: #1a202b;
+  --real: #7ea3ff;
+  --real-soft: #17223f;
+  --fake: #ff6b45;
+  --fake-soft: #3a1a12;
+  --amber: #f2b33d;
+  --teal: #43d4bf;
+  --chance: #5d6676;
+  --screen: #05070b;
+  --screen-ink: #e8ecf3;
+  --glass: rgba(10, 13, 19, 0.7);
+  --shadow: 0 1px 0 rgba(255, 255, 255, 0.03), 0 24px 50px -28px rgba(0, 0, 0, 0.8);
+  --grain-opacity: 0.18;
+  color-scheme: dark;
+}
+
+@theme {
+  --font-display: 'Newsreader Variable', 'Newsreader', Georgia, serif;
+  --font-sans: 'Inter Tight Variable', 'Inter Tight', ui-sans-serif, system-ui, sans-serif;
+  --font-mono: 'IBM Plex Mono', ui-monospace, 'SFMono-Regular', monospace;
+  --font-zh: 'PingFang SC', 'Hiragino Sans GB', 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
+  --color-paper: var(--paper);
+  --color-paper-2: var(--paper-2);
+  --color-card: var(--card);
+  --color-ink: var(--ink);
+  --color-ink-2: var(--ink-2);
+  --color-ink-3: var(--ink-3);
+  --color-ink-4: var(--ink-4);
+  --color-rule: var(--rule);
+  --color-rule-2: var(--rule-2);
+  --color-real: var(--real);
+  --color-real-soft: var(--real-soft);
+  --color-fake: var(--fake);
+  --color-fake-soft: var(--fake-soft);
+  --color-amber: var(--amber);
+  --color-teal: var(--teal);
+  --color-chance: var(--chance);
+  --color-screen: var(--screen);
+  --ease-out-expo: cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+html {
+  background: var(--paper);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  scroll-behavior: smooth;
+  scroll-padding-top: 84px;
+}
+body {
+  font-family: var(--font-sans);
+  background: var(--paper);
+  overflow-x: hidden;
+}
+::selection {
+  background: var(--fake);
+  color: #fff;
+}
+
+/* a still paper grain (never animates: the light page stays quiet until the visitor acts) */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  opacity: var(--grain-opacity);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='180' height='180'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix values='0 0 0 0 0.45 0 0 0 0 0.42 0 0 0 0 0.38 0 0 0 0.22 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  mix-blend-mode: multiply;
+}
+:root[data-theme='dark'] body::before {
+  mix-blend-mode: screen;
+}
+#root {
+  position: relative;
+  z-index: 1;
+}
+
+.font-display {
+  font-family: var(--font-display);
+  font-optical-sizing: auto;
+  font-variant-numeric: lining-nums;
+}
+.font-mono {
+  font-family: var(--font-mono);
+}
+.font-zh {
+  font-family: var(--font-zh);
+}
+.tnum {
+  font-variant-numeric: tabular-nums lining-nums;
+}
+
+/* the uppercase micro-label used across the page */
+.kicker {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--ink-3);
+}
+
+/* hairline rules that draw in */
+.rule {
+  height: 1px;
+  background: var(--rule);
+}
+
+/* a viewfinder: four corner brackets around any media frame */
+.viewfinder {
+  position: relative;
+}
+.viewfinder > .vf-c {
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border-color: currentColor;
+  pointer-events: none;
+  z-index: 3;
+}
+.vf-c.tl { top: 10px; left: 10px; border-top: 1.5px solid; border-left: 1.5px solid; }
+.vf-c.tr { top: 10px; right: 10px; border-top: 1.5px solid; border-right: 1.5px solid; }
+.vf-c.bl { bottom: 10px; left: 10px; border-bottom: 1.5px solid; border-left: 1.5px solid; }
+.vf-c.br { bottom: 10px; right: 10px; border-bottom: 1.5px solid; border-right: 1.5px solid; }
+
+/* a blinking REC dot */
+@keyframes rec {
+  0%, 55% { opacity: 1; }
+  56%, 100% { opacity: 0.15; }
+}
+.rec-dot {
+  width: 7px;
+  height: 7px;
+  border-radius: 99px;
+  background: #ff3b2f;
+  box-shadow: 0 0 10px #ff3b2f;
+  animation: rec 1.2s steps(1) infinite;
+}
+
+/* the rubber verdict stamp */
+@keyframes stamp-in {
+  0% { transform: translate(-50%, -50%) rotate(var(--rot, -8deg)) scale(2.4); opacity: 0; filter: blur(6px); }
+  55% { transform: translate(-50%, -50%) rotate(var(--rot, -8deg)) scale(0.92); opacity: 1; filter: blur(0); }
+  75% { transform: translate(-50%, -50%) rotate(var(--rot, -8deg)) scale(1.04); }
+  100% { transform: translate(-50%, -50%) rotate(var(--rot, -8deg)) scale(1); opacity: 1; }
+}
+.stamp {
+  position: absolute;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) rotate(var(--rot, -8deg));
+  padding: 0.35em 0.7em 0.3em;
+  border: 3px solid currentColor;
+  border-radius: 6px;
+  font-family: var(--font-mono);
+  font-weight: 600;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  white-space: nowrap;
+  background: color-mix(in oklab, currentColor 10%, transparent);
+  backdrop-filter: blur(2px);
+  animation: stamp-in 0.55s var(--ease-out-expo) both;
+  mask-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='60'%3E%3Cfilter id='r'%3E%3CfeTurbulence baseFrequency='.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 -2.2 1.9'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23r)'/%3E%3C/svg%3E");
+  mask-size: 120px 60px;
+}
+
+/* scanline sweep used when a clip is being "analysed" */
+@keyframes sweep {
+  0% { transform: translateY(-100%); }
+  100% { transform: translateY(100%); }
+}
+.scan::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(to bottom, transparent 0%, color-mix(in oklab, var(--teal) 30%, transparent) 48%, color-mix(in oklab, var(--teal) 55%, transparent) 50%, transparent 52%);
+  animation: sweep 2.4s linear infinite;
+  pointer-events: none;
+  mix-blend-mode: screen;
+}
+
+/* buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.6em;
+  height: 46px;
+  padding: 0 1.15rem;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  border: 1px solid var(--ink);
+  transition: background 0.25s, color 0.25s, transform 0.25s var(--ease-out-expo), border-color 0.25s;
+  white-space: nowrap;
+}
+.btn:active {
+  transform: translateY(1px) scale(0.99);
+}
+.btn-dark {
+  background: var(--ink);
+  color: var(--paper);
+}
+.btn-dark:hover {
+  background: var(--fake);
+  border-color: var(--fake);
+  color: #fff;
+}
+.btn-line {
+  background: transparent;
+  color: var(--ink);
+}
+.btn-line:hover {
+  background: var(--ink);
+  color: var(--paper);
+}
+
+.link-u {
+  background: linear-gradient(currentColor, currentColor) 0 100% / 0 1px no-repeat;
+  transition: background-size 0.35s var(--ease-out-expo);
+}
+.link-u:hover {
+  background-size: 100% 1px;
+}
+
+/* the theme switch's circular reveal (View Transitions) */
+::view-transition-old(root),
+::view-transition-new(root) {
+  animation: none;
+  mix-blend-mode: normal;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+/* the dark theme is a monitor room: faint, still scanlines over everything */
+:root[data-theme='dark'] body::after {
+  content: '';
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  z-index: 0;
+  background: repeating-linear-gradient(to bottom, rgba(255, 255, 255, 0.018) 0 1px, transparent 1px 3px);
+}

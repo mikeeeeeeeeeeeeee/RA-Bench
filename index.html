@@ -1,0 +1,30 @@
+<!doctype html>
+<html lang="en" data-theme="light">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="theme-color" content="#f3f1ec" />
+    <title>RA-Bench — Can We Defend Against AI-Generated Video Attacks on Real-World Crisis Events?</title>
+    <meta name="description" content="RA-Bench: 17,886 videos — 1,830 real crisis-event anchors and 16,056 generated clips from nine video generators — to test detectors, people and social dissemination." />
+    <link rel="canonical" href="https://mikeeeeeeeeeeeeee.github.io/RA-Bench/" />
+    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
+    <meta property="og:type" content="website" />
+    <meta property="og:title" content="RA-Bench — Can we defend against AI-generated crisis videos?" />
+    <meta property="og:description" content="Real videos as anchors: 1,830 real crisis clips, 16,056 generated continuations from nine generators. No detector family generalizes; 633 forgeries fooled all five human reviewers." />
+    <meta property="og:url" content="https://mikeeeeeeeeeeeeee.github.io/RA-Bench/" />
+    <meta property="og:image" content="https://mikeeeeeeeeeeeeee.github.io/RA-Bench/og-image.jpg" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <script>
+      // apply the saved theme before the first paint (light is the default)
+      try {
+        var q = new URLSearchParams(location.search).get('theme');
+        var t = q === 'dark' || q === 'light' ? q : localStorage.getItem('rabench-theme');
+        if (t === 'dark') document.documentElement.dataset.theme = 'dark';
+      } catch (e) {}
+    </script>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>
