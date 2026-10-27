@@ -12,7 +12,7 @@ export function Pipeline() {
   const [hot, setHot] = useState<number | null>(null);
   return (
     <div ref={ref} className="relative">
-      <svg className="pointer-events-none absolute top-[1px] left-0 hidden h-6 w-full lg:block" preserveAspectRatio="none" viewBox="0 0 1000 24">
+      <svg className="pointer-events-none absolute -top-9 left-0 hidden h-6 w-full lg:block" preserveAspectRatio="none" viewBox="0 0 1000 24">
         <motion.line x1="0" y1="12" x2="1000" y2="12" stroke="var(--rule)" strokeWidth="1.5" initial={{ pathLength: 0 }} animate={on ? { pathLength: 1 } : {}} transition={{ duration: 1.6, ease }} />
         {on &&
           Array.from({ length: 9 }).map((_, i) => (
@@ -66,7 +66,7 @@ export function DomainRibbon() {
             animate={on ? { flexBasis: `${(d.n / total) * 100}%` } : {}}
             transition={{ duration: 1.1, delay: i * 0.06, ease }}
           >
-            <span className="absolute bottom-1.5 left-2 font-mono text-[10px] tracking-[0.08em] text-paper/90 uppercase">{d.n / total > 0.06 ? d.short : ''}</span>
+            <span className="absolute bottom-1.5 left-2 font-mono text-[10px] tracking-[0.08em] text-paper/90 uppercase">{d.n / total > 0.085 ? d.short : ''}</span>
           </motion.div>
         ))}
       </div>
