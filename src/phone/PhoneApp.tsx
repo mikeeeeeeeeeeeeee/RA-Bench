@@ -11,7 +11,8 @@ import { Reveal, WordsRise } from '@/components/ui/Reveal';
 import { Claim } from '@/components/ui/Claim';
 import { ForensicLens } from '@/components/viz/ForensicLens';
 import { FilmPlayer } from '@/components/viz/FilmPlayer';
-import { FrontierGallery, RealOrAI } from '@/components/viz/RealOrAI';
+import { RealOrAI } from '@/components/viz/RealOrAI';
+import { SpotTheFake } from '@/components/viz/SpotTheFake';
 import { GeneratorWall } from '@/components/viz/GeneratorWall';
 import { CompareMatrix, DomainRibbon, Pipeline } from '@/components/viz/BenchmarkBits';
 import { BusterBias, DetectorDrop, PromptRoulette, TimestampTrap } from '@/components/viz/Detectors';
@@ -134,7 +135,6 @@ function Sub({ tag, title, children }: { tag: string; title: string; children: R
 
 export default function PhoneApp() {
   const [menu, setMenu] = useState(false);
-  const [unlocked, setUnlocked] = useState(false);
   const lead = AUTHORS.filter((a) => a.equal), corr = AUTHORS.filter((a) => a.corr), rest = AUTHORS.filter((a) => !a.equal && !a.corr);
   const [copied, setCopied] = useState(false);
   return (
@@ -183,12 +183,16 @@ export default function PhoneApp() {
           <FilmPlayer compact />
         </PSection>
 
-        <PSection id="test" no="02" kicker="Perception test" title="Real or AI?" accent={['AI?']} lede="Ten clips, one at a time. Some are real; the rest were made from one sentence by MiniMax-H3, Seedance 2.5 or Wan 3.0." tint>
-          <RealOrAI compact onDone={() => setUnlocked(true)} />
-          <p className="mt-4 text-[12.5px] leading-relaxed text-ink-3">AI clips: VBench-2.0 prompts, sampled at random with no quality filtering. Real clips: RA-Bench anchors (DVIDS, NOAA, Pexels). All cut to 5 s, 720p, no sound.</p>
-          <div className="mt-12">
-            <h3 className="font-display mb-5 text-[28px] leading-[1.05]">The frontier, <em className="text-fake">unfiltered.</em></h3>
-            <FrontierGallery compact unlocked={unlocked} onReveal={() => setUnlocked(true)} />
+        <PSection id="test" no="02" kicker="Perception test" title="Can you tell real from generated?" accent={['generated?']} tint>
+          <div className="kicker text-fake">Round 1 · One clip at a time</div>
+          <p className="mt-2 mb-5 text-[15.5px] leading-relaxed text-ink-2">Six clips: three real, three made from one sentence by Seedance 2.5 or MiniMax-H3. Real or AI?</p>
+          <RealOrAI compact />
+          <p className="mt-4 text-[12.5px] leading-relaxed text-ink-3">Real clips are RA-Bench anchors (DVIDS, NOAA, Pexels). All cut to 5 s, 720p, no sound.</p>
+          <div id="pairs" className="mt-12 scroll-mt-16 border-t border-rule pt-8">
+            <div className="kicker text-fake">Round 2 · Side by side</div>
+            <h3 className="font-display mt-2 text-[25px] leading-[1.1]">Same first frame. Which one is generated?</h3>
+            <p className="mt-2 mb-5 text-[15.5px] leading-relaxed text-ink-2">Five RA-Bench pairs. Each generated clip fooled all five of our reviewers. Tap the one you think is generated.</p>
+            <SpotTheFake />
           </div>
         </PSection>
 

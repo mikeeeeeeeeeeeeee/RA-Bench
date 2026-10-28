@@ -1,5 +1,5 @@
 import { AnimatePresence, motion, useMotionValue, useTransform, animate } from 'motion/react';
-import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { useCallback, useEffect, useRef, useState } from 'react';
 import { Stamp } from '@/components/ui/Stamp';
 import { Icon } from '@/components/ui/Icon';
 import { asset } from '@/lib/hooks';
@@ -7,23 +7,13 @@ import data from '@/data/realorai.json';
 import { HUMAN } from '@/data/results';
 
 /**
- * "Real or AI?" — one clip at a time. A round is 10 clips: 6 from three frontier generators (2 each) and
- * 4 real RA-Bench anchors, freshly shuffled every game. Answer by dragging the card (left = real,
- * right = AI), with the buttons, or with ← / →. The reveal names the model and types out the one-sentence
- * prompt the clip was made from. Below sits every frontier clip, blurred until the round is over.
+ * "Real or AI?" — one clip at a time: three clips from frontier generators and three real RA-Bench anchors,
+ * in a fresh order every game. Answer by dragging the card (left = real, right = AI), with the buttons, or
+ * with ← / →. The reveal names the model and types out the one-sentence prompt the clip was made from.
  */
 
 export type Clip = (typeof data.clips)[number] & { model?: string; modelName?: string; maker?: string; prompt?: string; dims?: string[]; credit?: string; license?: string; url?: string };
 const CLIPS = data.clips as Clip[];
-export const AI_CLIPS = CLIPS.filter((c) => c.kind === 'ai');
-const REAL_CLIPS = CLIPS.filter((c) => c.kind === 'real');
-export const MODELS = [
-  { key: 'minimax-h3', name: 'MiniMax-H3', maker: 'MiniMax' },
-  { key: 'seedance-2.5', name: 'Seedance 2.5', maker: 'ByteDance' },
-  { key: 'wan-3.0', name: 'Wan 3.0', maker: 'Alibaba' },
-];
-const AI_PER_MODEL = 2;
-const REAL_PER_ROUND = 4;
 
 const shuffle = <T,>(a: T[]) => {
   const b = [...a];
@@ -33,10 +23,7 @@ const shuffle = <T,>(a: T[]) => {
   }
   return b;
 };
-function draw(): Clip[] {
-  const ai = MODELS.flatMap((m) => shuffle(AI_CLIPS.filter((c) => c.model === m.key)).slice(0, AI_PER_MODEL));
-  return shuffle([...ai, ...shuffle(REAL_CLIPS).slice(0, REAL_PER_ROUND)]);
-}
+const draw = () => shuffle(CLIPS);
 
 type Pick = 'real' | 'ai';
 type Answer = { clip: Clip; pick: Pick; correct: boolean };
@@ -249,7 +236,7 @@ export function RealOrAI({ compact = false, onDone }: { compact?: boolean; onDon
               </div>
               <div className="mt-6 flex flex-wrap gap-2.5">
                 <button onClick={restart} className="btn btn-dark"><Icon name="replay" size={14} /> New round</button>
-                <a href="#frontier" className="btn btn-line">All 15 AI clips <Icon name="down" size={13} /></a>
+                <a href="#pairs" className="btn btn-line">Round 2: side by side <Icon name="down" size={13} /></a>
               </div>
             </motion.div>
           )}
@@ -282,61 +269,6 @@ export function RealOrAI({ compact = false, onDone }: { compact?: boolean; onDon
               </button>
             </div>
           )}
-        </div>
-      )}
-    </div>
-  );
-}
-
-/** every frontier clip, by model; hover (or tap) to play; blurred until the round is over or revealed */
-export function FrontierGallery({ unlocked, onReveal, compact = false }: { unlocked: boolean; onReveal: () => void; compact?: boolean }) {
-  const [playing, setPlaying] = useState<string | null>(null);
-  const rows = useMemo(() => MODELS.map((m) => ({ ...m, clips: AI_CLIPS.filter((c) => c.model === m.key) })), []);
-  return (
-    <div id="frontier" className="relative scroll-mt-24">
-      <div className={`space-y-8 transition-[filter,opacity] duration-700 ${unlocked ? '' : 'pointer-events-none opacity-70 blur-[14px] select-none'}`} aria-hidden={!unlocked}>
-        {rows.map((r) => (
-          <div key={r.key}>
-            <div className="mb-3 flex items-baseline justify-between gap-4 border-b border-ink pb-2">
-              <h4 className="font-display text-[24px] leading-none">{r.name}</h4>
-              <span className="kicker">{compact ? r.maker : `${r.maker} · 5 random clips`}</span>
-            </div>
-            <div className={compact ? '-mx-5 flex snap-x snap-mandatory gap-2 overflow-x-auto px-5 pb-2' : 'grid grid-cols-5 gap-2'}>
-              {r.clips.map((c) => {
-                const on = playing === c.id;
-                return (
-                  <button
-                    key={c.id}
-                    onMouseEnter={() => setPlaying(c.id)}
-                    onMouseLeave={() => setPlaying((p) => (p === c.id ? null : p))}
-                    onClick={() => setPlaying((p) => (p === c.id ? null : c.id))}
-                    className={`group relative flex shrink-0 snap-start flex-col overflow-hidden rounded-[3px] border border-rule bg-card text-left ${compact ? 'w-[78%]' : ''}`}
-                  >
-                    <div className="relative aspect-video bg-screen text-white">
-                      <img src={asset(c.poster)} alt="" loading="lazy" className="absolute inset-0 h-full w-full object-cover" />
-                      {on && <video src={asset(c.src)} muted playsInline autoPlay loop className="absolute inset-0 h-full w-full object-cover" />}
-                      <span className="absolute top-2 left-2 rounded-[2px] bg-[var(--fake)] px-1.5 py-0.5 font-mono text-[9px] tracking-[0.12em] uppercase">AI</span>
-                      <span className={`absolute right-2 bottom-2 grid h-7 w-7 place-items-center rounded-full bg-white/90 text-[#101726] transition-opacity ${on ? 'opacity-0' : 'opacity-100'}`}><Icon name="play" size={11} className="ml-0.5" /></span>
-                    </div>
-                    <div className="flex-1 px-2.5 pt-2 pb-2.5 text-ink">
-                      <div className="text-[13px] leading-tight font-medium">{c.title}</div>
-                      <div className={`font-display mt-1 text-[12.5px] leading-snug text-ink-3 italic ${on ? '' : 'line-clamp-2'}`}>“{c.prompt}”</div>
-                    </div>
-                  </button>
-                );
-              })}
-            </div>
-          </div>
-        ))}
-      </div>
-      {!unlocked && (
-        <div className="absolute inset-0 z-10 grid place-items-center">
-          <div className="max-w-md border border-rule bg-card p-6 text-center shadow-[var(--shadow)]">
-            <div className="kicker text-fake">Spoiler</div>
-            <p className="font-display mt-2 text-[22px] leading-snug">All 15 frontier clips, with the sentence each one came from.</p>
-            <p className="mt-2 text-[13.5px] text-ink-3">Some of them are in your round. Finish it first, or</p>
-            <button onClick={onReveal} className="btn btn-line mt-4">Reveal now <Icon name="eye" size={14} /></button>
-          </div>
         </div>
       )}
     </div>

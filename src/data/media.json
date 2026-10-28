@@ -27,6 +27,58 @@
    }
   ]
  },
+ "game": [
+  {
+   "id": "L1-02_L2-02a_0008__scene_005",
+   "gen": "Kling",
+   "genKey": "kling_v3",
+   "dur": 3.04,
+   "real": "media/game0-real.mp4",
+   "fake": "media/game0-gen.mp4",
+   "realPoster": "media/game0-real.webp",
+   "fakePoster": "media/game0-gen.webp"
+  },
+  {
+   "id": "L1-04_L2-04a_0008__scene_002",
+   "gen": "Runway",
+   "genKey": "runway",
+   "dur": 4.04,
+   "real": "media/game1-real.mp4",
+   "fake": "media/game1-gen.mp4",
+   "realPoster": "media/game1-real.webp",
+   "fakePoster": "media/game1-gen.webp"
+  },
+  {
+   "id": "L1-02_L2-02c_0010__scene_005",
+   "gen": "Kling",
+   "genKey": "kling_v3",
+   "dur": 8.04,
+   "real": "media/game2-real.mp4",
+   "fake": "media/game2-gen.mp4",
+   "realPoster": "media/game2-real.webp",
+   "fakePoster": "media/game2-gen.webp"
+  },
+  {
+   "id": "L1-01_L2-01b_0005__scene_014",
+   "gen": "Seedance 2.0",
+   "genKey": "seedance2",
+   "dur": 4.04,
+   "real": "media/game3-real.mp4",
+   "fake": "media/game3-gen.mp4",
+   "realPoster": "media/game3-real.webp",
+   "fakePoster": "media/game3-gen.webp"
+  },
+  {
+   "id": "L1-02_L2-02d_0002__scene_010",
+   "gen": "Hailuo",
+   "genKey": "hailuo_2_3_fast",
+   "dur": 5.88,
+   "real": "media/game4-real.mp4",
+   "fake": "media/game4-gen.mp4",
+   "realPoster": "media/game4-real.webp",
+   "fakePoster": "media/game4-gen.webp"
+  }
+ ],
  "wall": {
   "id": "L1-09_L2-09a_0008__scene_001",
   "tiles": [

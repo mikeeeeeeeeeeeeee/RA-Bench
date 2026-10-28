@@ -129,13 +129,15 @@ body::before {
   font-variant-numeric: tabular-nums lining-nums;
 }
 
-/* the uppercase micro-label used across the page */
-.kicker {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
-  color: var(--ink-3);
+/* the uppercase micro-label used across the page (in the components layer, so text-* utilities can recolour it) */
+@layer components {
+  .kicker {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+  }
 }
 
 /* hairline rules that draw in */
